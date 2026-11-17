@@ -33,9 +33,10 @@ export const site = {
 };
 
 export const nav = [
-  { label: 'Treatments', href: '/treatments' },
-  { label: 'Doctors', href: '/doctors' },
-  { label: 'Clinic', href: '/clinic' },
-  { label: 'Achievements', href: '/achievements' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'About', href: '/#about' },
+  { label: 'Doctors', href: '/#doctors' },
+  { label: 'Treatments', href: '/#treatments' },
+  { label: 'Reviews', href: '/#google-reviews' },
+  { label: 'Contact', href: '/#contact' },
+  { label: 'FAQs', href: '/#faq' },
 ];

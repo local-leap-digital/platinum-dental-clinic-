@@ -3,13 +3,12 @@ import { Phone } from '@lucide/astro';
 import { site } from '../../data/site';
 import { waLink, quickMessage } from '../../utils/whatsapp';
 import WhatsAppIcon from '../ui/WhatsAppIcon.astro';
-import OpdHours from './OpdHours.astro';
 ---
 
 <section aria-labelledby="hero-title" class="relative">
   {/* Upper band */}
   <div class="bg-enamel">
-    <div class="wrap grid items-center gap-8 pb-24 pt-7 sm:gap-10 md:pb-32 md:pt-12 lg:grid-cols-12 lg:gap-8">
+    <div class="wrap grid items-center gap-8 pb-10 pt-7 sm:gap-10 md:pb-10 md:pt-10 lg:grid-cols-12 lg:gap-8">
       <div class="lg:col-span-6">
         <h1 id="hero-title" class="text-[2.2rem] font-bold leading-[1.08] [text-wrap:balance] min-[380px]:text-[2.4rem] sm:text-[3.2rem] lg:text-[3.4rem]">
           One of Kolhapur's{' '}
@@ -37,7 +36,7 @@ import OpdHours from './OpdHours.astro';
         <img
           src="/images/hero-consult.jpg"
           alt="Dentist talking a patient through her treatment in a bright treatment room"
-          class="relative aspect-[4/3] w-full rounded-md object-cover"
+          class="relative aspect-[4/3] w-full rounded-md object-cover lg:aspect-[16/10]"
           width="1400"
           height="1050"
           fetchpriority="high"
@@ -47,10 +46,5 @@ import OpdHours from './OpdHours.astro';
         </p>
       </div>
     </div>
-  </div>
-
-  {/* Overlapping OPD hours card: live status, 3D dial for today, weekly timetable */}
-  <div class="wrap relative -mt-16 md:-mt-24">
-    <OpdHours />
   </div>
 </section>
