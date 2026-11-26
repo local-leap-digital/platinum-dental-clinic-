@@ -5,6 +5,11 @@
 @layer base {
   html { scroll-behavior: smooth; scroll-padding-top: 76px; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   @media (min-width: 768px) { html { scroll-padding-top: 88px; } }
+  /* Large monitors and TVs: scale the whole page up so it fills the screen
+     instead of sitting in a narrow column with tiny text. */
+  @media (min-width: 1800px) { html { zoom: 1.15; } }
+  @media (min-width: 2300px) { html { zoom: 1.35; } }
+  @media (min-width: 3200px) { html { zoom: 1.8; } }
   body {
     @apply bg-white font-sans text-slate antialiased;
     font-size: 16px;
@@ -41,7 +46,7 @@
   .h-section { @apply text-[1.8rem] font-bold leading-[1.12] [text-wrap:balance] sm:text-[2.2rem] md:text-[2.6rem] md:leading-[1.1]; }
 
   /* Section spacing: tighter on phones so pages aren't endless scrolls */
-  .section-y { @apply py-14 sm:py-20 md:py-28; }
+  .section-y { @apply py-12 sm:py-16 md:py-20; }
 
   .link-underline {
     background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
