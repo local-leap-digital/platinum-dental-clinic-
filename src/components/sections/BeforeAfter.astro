@@ -16,18 +16,18 @@ const message = `Hello ${site.name}, I saw your smile stories and would like to 
 const pad = (n: number) => String(n).padStart(2, '0');
 ---
 
-<section id="results" aria-labelledby="results-title" class="ss section-y relative overflow-hidden bg-ink-deep text-white">
+<section id="results" aria-labelledby="results-title" class="ss section-y relative overflow-hidden bg-white">
   <div class="ss-aurora" aria-hidden="true"></div>
 
   <div class="wrap relative">
     <div class="reveal grid gap-6 lg:grid-cols-12 lg:items-end">
       <div class="lg:col-span-7">
-        <p class="kicker !text-clinic before:!bg-clinic">Real results</p>
-        <h2 id="results-title" class="h-section !text-white">
+        <p class="kicker">Real results</p>
+        <h2 id="results-title" class="h-section">
           Smile stories<span class="text-clinic">.</span>
         </h2>
       </div>
-      <p class="text-[15.5px] leading-relaxed text-white/65 lg:col-span-5">
+      <p class="text-[15.5px] leading-relaxed text-slate lg:col-span-5">
         Real patients, photographed at our clinic. Watch each smile change from the first visit to the final
         result — or press and hold any picture to look back at “before”.
       </p>
@@ -39,14 +39,14 @@ const pad = (n: number) => String(n).padStart(2, '0');
         {
           stories.map((s, i) => (
             <li>
-              <button type="button" class="ss-item group relative w-full border-b border-white/10 py-3.5 text-left" data-ss-go={i}>
+              <button type="button" class="ss-item group relative w-full border-b border-line py-3.5 text-left" data-ss-go={i}>
                 <span class="flex items-baseline gap-4">
-                  <span class="ss-num font-display text-[13px] font-bold text-white/35">{pad(i + 1)}</span>
+                  <span class="ss-num font-display text-[13px] font-bold text-slate-soft/70">{pad(i + 1)}</span>
                   <span class="min-w-0">
-                    <span class="ss-title block font-display text-[17px] font-bold leading-snug text-white/55 transition-colors group-hover:text-white">
+                    <span class="ss-title block font-display text-[17px] font-bold leading-snug text-slate-soft transition-colors group-hover:text-ink">
                       {s.title}
                     </span>
-                    <span class="ss-tag mt-0.5 block text-[12.5px] text-white/35">
+                    <span class="ss-tag mt-0.5 block text-[12.5px] text-slate-soft/80">
                       {s.tag} · {s.stages.length} steps
                     </span>
                   </span>
@@ -61,7 +61,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
       <!-- Stage -->
       <div class="lg:col-span-8">
         <div
-          class="ss-frame relative aspect-[3/2] cursor-grab touch-pan-y select-none overflow-hidden rounded-md bg-black shadow-[0_30px_80px_-30px_rgba(0,0,0,0.8)] ring-1 ring-white/10 active:cursor-grabbing"
+          class="ss-frame relative aspect-[3/2] cursor-grab touch-pan-y select-none overflow-hidden rounded-md bg-black shadow-[0_30px_70px_-30px_rgba(13,30,56,0.45)] ring-1 ring-line active:cursor-grabbing"
           tabindex="0"
           role="group"
           aria-roledescription="Before and after player"
@@ -88,7 +88,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
           <!-- Top bar -->
           <div class="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between p-3 sm:p-4">
-            <span class="ss-chip inline-flex items-center gap-2 rounded-full bg-black/55 px-3 py-1.5 font-display text-[12px] font-bold uppercase tracking-[0.14em] backdrop-blur sm:text-[13px]">
+            <span class="ss-chip inline-flex items-center gap-2 rounded-full bg-black/55 px-3 py-1.5 font-display text-[12px] font-bold uppercase tracking-[0.14em] text-white backdrop-blur sm:text-[13px]">
               <span class="ss-dot h-2 w-2 rounded-full bg-white"></span>
               <span data-ss-stage>Before</span>
             </span>
@@ -100,7 +100,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
           <!-- Caption -->
           <div class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent px-4 pb-4 pt-16 sm:px-6 sm:pb-5">
             <p class="font-display text-[11.5px] font-bold uppercase tracking-[0.16em] text-clinic" data-ss-tag>{stories[0].tag}</p>
-            <p class="mt-1 font-display text-[1.25rem] font-bold leading-tight sm:text-[1.6rem]" data-ss-title>{stories[0].title}</p>
+            <p class="mt-1 font-display text-[1.25rem] font-bold leading-tight !text-white sm:text-[1.6rem]" data-ss-title>{stories[0].title}</p>
             <p class="mt-1 hidden max-w-xl text-[14px] leading-snug text-white/75 sm:block" data-ss-note>{stories[0].note}</p>
           </div>
 
@@ -125,7 +125,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
             stories.map((s, i) => (
               <button type="button" class="ss-thumb relative w-[38%] shrink-0 snap-start overflow-hidden rounded-md ring-2 ring-transparent sm:w-[24%]" data-ss-go={i}>
                 <img src={s.stages[s.stages.length - 1].src} alt="" class="aspect-[3/2] w-full object-cover" loading="lazy" style={s.focus ? `object-position: ${s.focus}` : undefined} />
-                <span class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-2 pb-1.5 pt-5 text-left text-[11.5px] font-semibold leading-tight">
+                <span class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-2 pb-1.5 pt-5 text-left text-[11.5px] font-semibold leading-tight text-white">
                   {s.title}
                 </span>
               </button>
@@ -134,9 +134,9 @@ const pad = (n: number) => String(n).padStart(2, '0');
         </div>
 
         <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
-          <p class="text-[12.5px] text-white/45">Shared with each patient’s permission. Results vary from person to person.</p>
-          <a href={waLink(message)} target="_blank" rel="noopener noreferrer" class="btn-light">
-            <WhatsAppIcon class="h-[18px] w-[18px] text-[#1B8F4A]" /> Start your smile story
+          <p class="text-[12.5px] text-slate-soft">Shared with each patient’s permission. Results vary from person to person.</p>
+          <a href={waLink(message)} target="_blank" rel="noopener noreferrer" class="btn-primary">
+            <WhatsAppIcon class="h-[18px] w-[18px]" /> Start your smile story
           </a>
         </div>
       </div>
@@ -151,8 +151,8 @@ const pad = (n: number) => String(n).padStart(2, '0');
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(40% 50% at 85% 10%, rgba(26, 155, 215, 0.22), transparent 70%),
-      radial-gradient(35% 45% at 10% 90%, rgba(47, 179, 122, 0.14), transparent 70%);
+      radial-gradient(40% 50% at 85% 10%, rgba(26, 155, 215, 0.10), transparent 70%),
+      radial-gradient(35% 45% at 10% 90%, rgba(47, 179, 122, 0.07), transparent 70%);
     pointer-events: none;
   }
 
@@ -181,9 +181,9 @@ const pad = (n: number) => String(n).padStart(2, '0');
   /* Index */
   .ss-bar { transform: scaleX(var(--p, 0)); opacity: 0; }
   .ss-item.is-active .ss-bar { opacity: 1; }
-  .ss-item.is-active .ss-title { color: #fff; }
-  .ss-item.is-active .ss-num { color: #1a9bd7; }
-  .ss-item.is-active .ss-tag { color: rgba(255, 255, 255, 0.6); }
+  .ss-item.is-active .ss-title { color: #13294b; }
+  .ss-item.is-active .ss-num { color: #1281b5; }
+  .ss-item.is-active .ss-tag { color: #3b4758; }
   .ss-thumb.is-active { --tw-ring-color: #1a9bd7; }
 
   /* Controls */
@@ -194,20 +194,21 @@ const pad = (n: number) => String(n).padStart(2, '0');
     width: 2.5rem;
     flex-shrink: 0;
     border-radius: 9999px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    color: #fff;
+    border: 1px solid #dce5ee;
+    background: #fff;
+    color: #13294b;
     transition: background 150ms ease, border-color 150ms ease;
   }
-  .ss-btn:hover { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.4); }
+  .ss-btn:hover { background: #13294b; border-color: #13294b; color: #fff; }
   [data-ss].is-paused .ss-i-pause { display: none; }
   [data-ss].is-paused .ss-i-play { display: block; }
 
   :global(.ss-step) { flex: 1; min-width: 0; text-align: left; padding-top: 0.35rem; }
-  :global(.ss-step-track) { display: block; height: 3px; border-radius: 9999px; background: rgba(255, 255, 255, 0.15); overflow: hidden; }
-  :global(.ss-step-fill) { display: block; height: 100%; width: 100%; background: #fff; transform-origin: left; transform: scaleX(var(--p, 0)); }
+  :global(.ss-step-track) { display: block; height: 3px; border-radius: 9999px; background: #dce5ee; overflow: hidden; }
+  :global(.ss-step-fill) { display: block; height: 100%; width: 100%; background: #0b6fa8; transform-origin: left; transform: scaleX(var(--p, 0)); }
   :global(.ss-step:last-child .ss-step-fill) { background: #2fb37a; }
-  :global(.ss-step-label) { display: block; margin-top: 0.45rem; font-size: 12px; font-weight: 600; color: rgba(255, 255, 255, 0.45); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  :global(.ss-step.is-current .ss-step-label) { color: #fff; }
+  :global(.ss-step-label) { display: block; margin-top: 0.45rem; font-size: 12px; font-weight: 600; color: #5e6b7d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  :global(.ss-step.is-current .ss-step-label) { color: #13294b; }
 
   @media (prefers-reduced-motion: reduce) {
     .ss-img, .ss-img.is-on { transition: opacity 200ms ease; transform: none; }
