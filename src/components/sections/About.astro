@@ -1,6 +1,5 @@
 ---
 import { Check } from '@lucide/astro';
-import { site } from '../../data/site';
 
 const promise = [
   'A written treatment plan explaining each step — before we start.',
@@ -21,27 +20,21 @@ const promise = [
         width="1200"
         height="1500"
       />
-      <div class="absolute -bottom-6 right-4 rounded-md bg-white px-4 py-3 sm:px-5 sm:py-4 shadow-[0_1px_0_#DCE5EE,0_0_0_1px_#DCE5EE] sm:-right-6">
-        <p class="text-[11.5px] font-semibold uppercase tracking-[0.14em] text-slate-soft sm:text-[12px] sm:tracking-[0.16em]">In Kolhapur since</p>
-        <p class="outline-numeral text-[3.25rem] sm:text-[4.5rem]">{site.established}</p>
-      </div>
     </div>
 
     <div class="reveal lg:col-span-7 lg:pl-8">
-      <p class="kicker">About the clinic</p>
-      <h2 id="about-title" class="h-section max-w-xl">
-        A neighbourhood clinic run by two specialists.
-      </h2>
+      <h2 id="about-title" class="kicker">About the clinic</h2>
       <div class="mt-5 max-w-2xl space-y-4 text-[16px] sm:mt-6 sm:text-[17px]">
         <p>
-          {site.name} is a
-          two-chair clinic on the third floor of Krystal Square, Nagala Park. Dr. Rohan started it in {site.established};
-          Dr. Aditi joined in 2017 and now looks after our younger patients and cosmetic treatments.
+          We provide a clean, modern and welcoming environment designed to make every patient feel
+          comfortable and at ease. The clinic features a soothing interior with refreshing green tones,
+          nature-inspired elements, spacious treatment areas and a well-organised layout.
         </p>
         <p>
-          Most people who come to us have been putting off a visit because of a bad experience. So we slow
-          down: we show you the X-ray, explain what we see, and talk you through each option. You decide; we
-          don’t push.
+          Our thoughtfully designed surroundings create a calm and positive atmosphere, helping reduce
+          dental anxiety while ensuring a comfortable treatment experience. With a strong emphasis on
+          hygiene, comfort, privacy and patient care, every aspect of the clinic is designed with the
+          patient’s well-being in mind.
         </p>
       </div>
 

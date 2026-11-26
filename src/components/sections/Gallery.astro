@@ -1,6 +1,7 @@
 ---
 import { gallery } from '../../data/gallery';
 import Lightbox from '../ui/Lightbox.astro';
+import VirtualTour from '../ui/VirtualTour.astro';
 ---
 
 <section id="clinic" aria-labelledby="clinic-title" class="section-y">
@@ -40,6 +41,8 @@ import Lightbox from '../ui/Lightbox.astro';
         ))
       }
     </ul>
+
+    <VirtualTour />
   </div>
   <Lightbox items={gallery} />
 </section>

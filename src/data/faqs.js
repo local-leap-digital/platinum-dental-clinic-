@@ -13,8 +13,8 @@ export const faqs = [
     a: 'Every 6 months for most people, or once a year if your teeth and gums are healthy. Regular check-ups catch cavities while they still need only a small filling.',
   },
   {
-    q: 'Do you accept UPI and cards?',
-    a: 'Yes — UPI (GPay, PhonePe, Paytm), debit and credit cards, and cash.',
+    q: 'What payment methods do you accept?',
+    a: 'We accept UPI (GPay, PhonePe, Paytm) and cash.',
   },
   {
     q: 'What if I have a dental emergency?',

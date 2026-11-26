@@ -1,76 +1,382 @@
 ---
-// "Real results": before/after comparison cards. Drag (or use arrow keys on)
-// the slider to reveal the "before" picture over the "after" picture.
+// "Smile stories": a dark, cinematic before/after player.
+// Each story plays its stages (Before → … → After) on a timeline, then moves
+// on to the next story. Visitors can pick a story from the index, click a
+// stage, use the arrows, or press and hold the picture to peek at "Before".
+// Autoplay only runs while the section is on screen, pauses on hover, and is
+// off for visitors who prefer reduced motion.
 // Pictures and labels live in src/data/beforeAfter.js.
-import { ChevronsLeftRight } from '@lucide/astro';
-import { cases } from '../../data/beforeAfter';
+import { ChevronLeft, ChevronRight, Pause, Play } from '@lucide/astro';
+import { stories } from '../../data/beforeAfter';
+import WhatsAppIcon from '../ui/WhatsAppIcon.astro';
+import { waLink } from '../../utils/whatsapp';
+import { site } from '../../data/site';
+
+const message = `Hello ${site.name}, I saw your smile stories and would like to book a consultation.`;
+const pad = (n: number) => String(n).padStart(2, '0');
 ---
 
-<section id="results" aria-labelledby="results-title" class="section-y">
-  <div class="wrap">
-    <div class="reveal mx-auto max-w-2xl text-center">
-      <p class="kicker justify-center">Real results</p>
-      <h2 id="results-title" class="h-section">Before &amp; after</h2>
-      <p class="mt-4 text-[16px] sm:text-[17px]">Drag across each picture to see the change.</p>
+<section id="results" aria-labelledby="results-title" class="ss section-y relative overflow-hidden bg-ink-deep text-white">
+  <div class="ss-aurora" aria-hidden="true"></div>
+
+  <div class="wrap relative">
+    <div class="reveal grid gap-6 lg:grid-cols-12 lg:items-end">
+      <div class="lg:col-span-7">
+        <p class="kicker !text-clinic before:!bg-clinic">Real results</p>
+        <h2 id="results-title" class="h-section !text-white">
+          Smile stories<span class="text-clinic">.</span>
+        </h2>
+      </div>
+      <p class="text-[15.5px] leading-relaxed text-white/65 lg:col-span-5">
+        Real patients, photographed at our clinic. Watch each smile change from the first visit to the final
+        result — or press and hold any picture to look back at “before”.
+      </p>
     </div>
 
-    <div class="mt-8 grid gap-8 sm:mt-12 sm:grid-cols-2 lg:grid-cols-3">
-      {
-        cases.map((c) => (
-          <figure class="reveal">
-            <div class="ba relative aspect-[4/3] select-none overflow-hidden rounded-md border border-line bg-enamel" style="--pos: 50%" data-ba>
-              <img src={c.after} alt={c.afterAlt} class="absolute inset-0 h-full w-full object-cover" loading="lazy" width="800" height="600" draggable="false" />
-              <img src={c.before} alt={c.beforeAlt} class="ba-before absolute inset-0 h-full w-full object-cover" loading="lazy" width="800" height="600" draggable="false" />
-
-              <span class="pointer-events-none absolute left-3 top-3 rounded bg-ink/80 px-2 py-1 font-display text-[12px] font-semibold uppercase tracking-[0.12em] text-white">Before</span>
-              <span class="pointer-events-none absolute right-3 top-3 rounded bg-white/90 px-2 py-1 font-display text-[12px] font-semibold uppercase tracking-[0.12em] text-ink">After</span>
-
-              <div class="ba-line pointer-events-none absolute inset-y-0 w-0.5 -translate-x-1/2 bg-white" aria-hidden="true">
-                <span class="absolute left-1/2 top-1/2 grid h-10 w-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-2 border-white bg-action text-white shadow-[0_4px_14px_rgba(13,30,56,0.35)]">
-                  <ChevronsLeftRight class="h-5 w-5" />
+    <div class="reveal mt-10 grid gap-6 sm:mt-14 lg:grid-cols-12 lg:gap-10" data-ss>
+      <!-- Story index (desktop) -->
+      <ol class="hidden lg:col-span-4 lg:flex lg:flex-col" aria-label="Smile stories">
+        {
+          stories.map((s, i) => (
+            <li>
+              <button type="button" class="ss-item group relative w-full border-b border-white/10 py-3.5 text-left" data-ss-go={i}>
+                <span class="flex items-baseline gap-4">
+                  <span class="ss-num font-display text-[13px] font-bold text-white/35">{pad(i + 1)}</span>
+                  <span class="min-w-0">
+                    <span class="ss-title block font-display text-[17px] font-bold leading-snug text-white/55 transition-colors group-hover:text-white">
+                      {s.title}
+                    </span>
+                    <span class="ss-tag mt-0.5 block text-[12.5px] text-white/35">
+                      {s.tag} · {s.stages.length} steps
+                    </span>
+                  </span>
                 </span>
-              </div>
+                <span class="ss-bar absolute bottom-[-1px] left-0 h-[2px] w-full origin-left bg-clinic" aria-hidden="true" />
+              </button>
+            </li>
+          ))
+        }
+      </ol>
 
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value="50"
-                step="1"
-                class="ba-range absolute inset-0 h-full w-full cursor-ew-resize opacity-0"
-                aria-label={`${c.label}: drag to compare before and after`}
-                data-ba-range
-              />
-            </div>
-            <figcaption class="mt-4">
-              <h3 class="text-[19px] font-bold">{c.label}</h3>
-              <p class="mt-1 text-[15px] leading-snug">{c.note}</p>
-            </figcaption>
-          </figure>
-        ))
-      }
+      <!-- Stage -->
+      <div class="lg:col-span-8">
+        <div
+          class="ss-frame relative aspect-[3/2] cursor-grab touch-pan-y select-none overflow-hidden rounded-md bg-black shadow-[0_30px_80px_-30px_rgba(0,0,0,0.8)] ring-1 ring-white/10 active:cursor-grabbing"
+          tabindex="0"
+          role="group"
+          aria-roledescription="Before and after player"
+          aria-label="Press and hold to see the before photo. Use left and right arrow keys to change step."
+          data-ss-frame
+        >
+          {
+            stories.map((s, si) =>
+              s.stages.map((st, ki) => (
+                <img
+                  src={st.src}
+                  alt={st.alt}
+                  class="ss-img absolute inset-0 h-full w-full object-cover"
+                  style={s.focus ? `object-position: ${s.focus}` : undefined}
+                  data-s={si}
+                  data-k={ki}
+                  loading={si === 0 ? 'eager' : 'lazy'}
+                  draggable="false"
+                />
+              ))
+            )
+          }
+          <div class="ss-shine" aria-hidden="true"></div>
+
+          <!-- Top bar -->
+          <div class="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between p-3 sm:p-4">
+            <span class="ss-chip inline-flex items-center gap-2 rounded-full bg-black/55 px-3 py-1.5 font-display text-[12px] font-bold uppercase tracking-[0.14em] backdrop-blur sm:text-[13px]">
+              <span class="ss-dot h-2 w-2 rounded-full bg-white"></span>
+              <span data-ss-stage>Before</span>
+            </span>
+            <span class="rounded-full bg-black/55 px-3 py-1.5 font-display text-[12px] font-bold tabular-nums tracking-wider text-white/85 backdrop-blur sm:text-[13px]">
+              <span data-ss-count>01</span><span class="text-white/45"> / {pad(stories.length)}</span>
+            </span>
+          </div>
+
+          <!-- Caption -->
+          <div class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent px-4 pb-4 pt-16 sm:px-6 sm:pb-5">
+            <p class="font-display text-[11.5px] font-bold uppercase tracking-[0.16em] text-clinic" data-ss-tag>{stories[0].tag}</p>
+            <p class="mt-1 font-display text-[1.25rem] font-bold leading-tight sm:text-[1.6rem]" data-ss-title>{stories[0].title}</p>
+            <p class="mt-1 hidden max-w-xl text-[14px] leading-snug text-white/75 sm:block" data-ss-note>{stories[0].note}</p>
+          </div>
+
+          <span class="ss-peek pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white px-4 py-2 font-display text-[13px] font-bold text-ink shadow-lg">
+            Looking back at “Before”
+          </span>
+        </div>
+
+        <!-- Timeline + controls -->
+        <div class="mt-4 flex items-center gap-3 sm:gap-4">
+          <button type="button" class="ss-btn" data-ss-prev aria-label="Previous story"><ChevronLeft class="h-5 w-5" /></button>
+          <div class="flex min-w-0 flex-1 gap-2" data-ss-steps role="tablist" aria-label="Steps"></div>
+          <button type="button" class="ss-btn" data-ss-toggle aria-label="Pause">
+            <Pause class="ss-i-pause h-4 w-4" /><Play class="ss-i-play hidden h-4 w-4" />
+          </button>
+          <button type="button" class="ss-btn" data-ss-next aria-label="Next story"><ChevronRight class="h-5 w-5" /></button>
+        </div>
+
+        <!-- Story strip (mobile / tablet) -->
+        <div class="-mx-4 mt-5 flex snap-x gap-3 overflow-x-auto px-4 pb-2 lg:hidden" aria-label="Smile stories">
+          {
+            stories.map((s, i) => (
+              <button type="button" class="ss-thumb relative w-[38%] shrink-0 snap-start overflow-hidden rounded-md ring-2 ring-transparent sm:w-[24%]" data-ss-go={i}>
+                <img src={s.stages[s.stages.length - 1].src} alt="" class="aspect-[3/2] w-full object-cover" loading="lazy" style={s.focus ? `object-position: ${s.focus}` : undefined} />
+                <span class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-2 pb-1.5 pt-5 text-left text-[11.5px] font-semibold leading-tight">
+                  {s.title}
+                </span>
+              </button>
+            ))
+          }
+        </div>
+
+        <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
+          <p class="text-[12.5px] text-white/45">Shared with each patient’s permission. Results vary from person to person.</p>
+          <a href={waLink(message)} target="_blank" rel="noopener noreferrer" class="btn-light">
+            <WhatsAppIcon class="h-[18px] w-[18px] text-[#1B8F4A]" /> Start your smile story
+          </a>
+        </div>
+      </div>
     </div>
-
   </div>
+
+  <script type="application/json" data-ss-data set:html={JSON.stringify(stories.map((s) => ({ title: s.title, tag: s.tag, note: s.note, stages: s.stages.map((x) => x.label) })))} />
 </section>
 
 <style>
-  .ba-before { clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
-  .ba-line { left: var(--pos); }
-  /* Let vertical page scroll pass through on touch screens */
-  .ba-range { touch-action: pan-y; -webkit-appearance: none; appearance: none; margin: 0; background: transparent; }
-  /* A thin invisible thumb so the divider sits exactly where you press */
-  .ba-range::-webkit-slider-thumb { -webkit-appearance: none; width: 2px; height: 600px; }
-  .ba-range::-moz-range-thumb { width: 2px; height: 600px; border: 0; }
-  .ba:has(.ba-range:focus-visible) { outline: 2px solid #1a9bd7; outline-offset: 3px; }
+  .ss-aurora {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(40% 50% at 85% 10%, rgba(26, 155, 215, 0.22), transparent 70%),
+      radial-gradient(35% 45% at 10% 90%, rgba(47, 179, 122, 0.14), transparent 70%);
+    pointer-events: none;
+  }
+
+  /* Images: crossfade with a slow settle */
+  .ss-img { opacity: 0; transform: scale(1.05); transition: opacity 700ms ease, transform 2600ms ease; }
+  .ss-img.is-on { opacity: 1; transform: scale(1); }
+
+  /* Light sweep when the "After" photo lands */
+  .ss-shine {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.28) 50%, transparent 65%);
+    transform: translateX(-120%);
+    pointer-events: none;
+  }
+  .ss-frame.is-after .ss-shine { animation: ss-shine 1.1s ease-out 0.15s; }
+  @keyframes ss-shine { to { transform: translateX(120%); } }
+
+  .ss-frame.is-after .ss-dot { background: #2fb37a; box-shadow: 0 0 0 4px rgba(47, 179, 122, 0.3); }
+  .ss-frame.is-mid .ss-dot { background: #1a9bd7; box-shadow: 0 0 0 4px rgba(26, 155, 215, 0.3); }
+
+  .ss-peek { opacity: 0; transition: opacity 200ms ease; }
+  .ss-frame.is-peek .ss-peek { opacity: 1; }
+  .ss-frame:focus-visible { outline: 2px solid #1a9bd7; outline-offset: 3px; }
+
+  /* Index */
+  .ss-bar { transform: scaleX(var(--p, 0)); opacity: 0; }
+  .ss-item.is-active .ss-bar { opacity: 1; }
+  .ss-item.is-active .ss-title { color: #fff; }
+  .ss-item.is-active .ss-num { color: #1a9bd7; }
+  .ss-item.is-active .ss-tag { color: rgba(255, 255, 255, 0.6); }
+  .ss-thumb.is-active { --tw-ring-color: #1a9bd7; }
+
+  /* Controls */
+  .ss-btn {
+    display: grid;
+    place-items: center;
+    height: 2.5rem;
+    width: 2.5rem;
+    flex-shrink: 0;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #fff;
+    transition: background 150ms ease, border-color 150ms ease;
+  }
+  .ss-btn:hover { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.4); }
+  [data-ss].is-paused .ss-i-pause { display: none; }
+  [data-ss].is-paused .ss-i-play { display: block; }
+
+  :global(.ss-step) { flex: 1; min-width: 0; text-align: left; padding-top: 0.35rem; }
+  :global(.ss-step-track) { display: block; height: 3px; border-radius: 9999px; background: rgba(255, 255, 255, 0.15); overflow: hidden; }
+  :global(.ss-step-fill) { display: block; height: 100%; width: 100%; background: #fff; transform-origin: left; transform: scaleX(var(--p, 0)); }
+  :global(.ss-step:last-child .ss-step-fill) { background: #2fb37a; }
+  :global(.ss-step-label) { display: block; margin-top: 0.45rem; font-size: 12px; font-weight: 600; color: rgba(255, 255, 255, 0.45); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  :global(.ss-step.is-current .ss-step-label) { color: #fff; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ss-img, .ss-img.is-on { transition: opacity 200ms ease; transform: none; }
+    .ss-frame.is-after .ss-shine { animation: none; }
+  }
 </style>
 
 <script>
-  document.querySelectorAll<HTMLElement>('[data-ba]').forEach((box) => {
-    const range = box.querySelector<HTMLInputElement>('[data-ba-range]');
-    if (!range) return;
-    const set = () => box.style.setProperty('--pos', `${range.value}%`);
-    range.addEventListener('input', set);
-    set();
-  });
+  type Story = { title: string; tag: string; note: string; stages: string[] };
+
+  const root = document.querySelector<HTMLElement>('[data-ss]');
+  const dataEl = document.querySelector('[data-ss-data]');
+  if (root && dataEl) {
+    const stories: Story[] = JSON.parse(dataEl.textContent || '[]');
+    const frame = root.querySelector<HTMLElement>('[data-ss-frame]')!;
+    const imgs = Array.from(frame.querySelectorAll<HTMLImageElement>('.ss-img'));
+    const stepsEl = root.querySelector<HTMLElement>('[data-ss-steps]')!;
+    const goBtns = Array.from(root.querySelectorAll<HTMLElement>('[data-ss-go]'));
+    const $ = (sel: string) => root.querySelector<HTMLElement>(sel)!;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const STEP_MS = 2400;
+    const LAST_MS = 3600;
+
+    let s = 0;
+    let k = 0;
+    let elapsed = 0;
+    let last = 0;
+    let inView = false;
+    let hovering = false;
+    let userPaused = reduce;
+    let peeking = false;
+
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const dur = () => (k === stories[s].stages.length - 1 ? LAST_MS : STEP_MS);
+
+    const buildSteps = () => {
+      stepsEl.innerHTML = '';
+      stories[s].stages.forEach((label, i) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'ss-step';
+        b.setAttribute('role', 'tab');
+        b.innerHTML = `<span class="ss-step-track"><span class="ss-step-fill"></span></span><span class="ss-step-label"></span>`;
+        b.querySelector('.ss-step-label')!.textContent = label;
+        b.addEventListener('click', () => {
+          k = i;
+          elapsed = 0;
+          render();
+        });
+        stepsEl.appendChild(b);
+      });
+    };
+
+    const paintProgress = () => {
+      const frac = Math.min(elapsed / dur(), 1);
+      stepsEl.querySelectorAll<HTMLElement>('.ss-step').forEach((el, i) => {
+        el.style.setProperty('--p', String(i < k ? 1 : i === k ? frac : 0));
+      });
+      const total = stories[s].stages.length;
+      goBtns.forEach((b) => {
+        if (Number(b.dataset.ssGo) === s) b.style.setProperty('--p', String((k + frac) / total));
+      });
+    };
+
+    const render = () => {
+      const story = stories[s];
+      const shownK = peeking ? 0 : k;
+      imgs.forEach((im) => im.classList.toggle('is-on', Number(im.dataset.s) === s && Number(im.dataset.k) === shownK));
+
+      const lastK = story.stages.length - 1;
+      frame.classList.toggle('is-after', shownK === lastK);
+      frame.classList.toggle('is-mid', shownK > 0 && shownK < lastK);
+      $('[data-ss-stage]').textContent = story.stages[shownK];
+      $('[data-ss-count]').textContent = pad(s + 1);
+      $('[data-ss-title]').textContent = story.title;
+      $('[data-ss-tag]').textContent = story.tag;
+      $('[data-ss-note]').textContent = story.note;
+
+      stepsEl.querySelectorAll<HTMLElement>('.ss-step').forEach((el, i) => {
+        el.classList.toggle('is-current', i === k);
+        el.setAttribute('aria-selected', String(i === k));
+      });
+      goBtns.forEach((b) => {
+        const on = Number(b.dataset.ssGo) === s;
+        b.classList.toggle('is-active', on);
+        b.setAttribute('aria-current', on ? 'true' : 'false');
+        if (!on) b.style.setProperty('--p', '0');
+      });
+      paintProgress();
+    };
+
+    const goStory = (i: number) => {
+      s = (i + stories.length) % stories.length;
+      k = 0;
+      elapsed = 0;
+      buildSteps();
+      render();
+      // keep the active thumbnail visible in the mobile strip
+      const thumb = root.querySelector<HTMLElement>(`.ss-thumb[data-ss-go="${s}"]`);
+      if (thumb && thumb.offsetParent) thumb.parentElement!.scrollTo({ left: thumb.offsetLeft - 16, behavior: 'smooth' });
+    };
+
+    const advance = () => {
+      if (k < stories[s].stages.length - 1) {
+        k++;
+        elapsed = 0;
+        render();
+      } else {
+        goStory(s + 1);
+      }
+    };
+
+    const loop = (now: number) => {
+      const dt = last ? now - last : 0;
+      last = now;
+      if (inView && !hovering && !userPaused && !peeking) {
+        elapsed += dt;
+        if (elapsed >= dur()) advance();
+        else paintProgress();
+      }
+      requestAnimationFrame(loop);
+    };
+
+    const setPaused = (p: boolean) => {
+      userPaused = p;
+      root.classList.toggle('is-paused', p);
+      $('[data-ss-toggle]').setAttribute('aria-label', p ? 'Play' : 'Pause');
+    };
+
+    // Controls
+    goBtns.forEach((b) => b.addEventListener('click', () => goStory(Number(b.dataset.ssGo))));
+    $('[data-ss-prev]').addEventListener('click', () => goStory(s - 1));
+    $('[data-ss-next]').addEventListener('click', () => goStory(s + 1));
+    $('[data-ss-toggle]').addEventListener('click', () => setPaused(!userPaused));
+
+    // Pause while the pointer is over the player (mouse only)
+    frame.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') hovering = true; });
+    frame.addEventListener('pointerleave', () => { hovering = false; endPeek(); });
+
+    // Press and hold to peek at "Before"
+    const endPeek = () => {
+      if (!peeking) return;
+      peeking = false;
+      frame.classList.remove('is-peek');
+      render();
+    };
+    frame.addEventListener('pointerdown', () => {
+      if (k === 0) return;
+      peeking = true;
+      frame.classList.add('is-peek');
+      render();
+    });
+    window.addEventListener('pointerup', endPeek);
+    window.addEventListener('pointercancel', endPeek);
+
+    frame.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') { e.preventDefault(); advance(); }
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        if (k > 0) { k--; elapsed = 0; render(); } else goStory(s - 1);
+      }
+    });
+
+    new IntersectionObserver((entries) => { inView = entries.some((e) => e.isIntersecting); }, { threshold: 0.35 }).observe(frame);
+
+    setPaused(userPaused);
+    buildSteps();
+    render();
+    requestAnimationFrame(loop);
+  }
 </script>

@@ -1,0 +1,148 @@
+---
+// 360° virtual tour of the clinic. Uses Pannellum (npm "pannellum") with
+// equirectangular photos in /public/images/clinic/360 (4096×2048 max, so
+// they also work on phones). The viewer loads only when it scrolls into view.
+const rooms = [
+  { id: 'waiting', label: 'Waiting area', src: '/images/clinic/360/waiting-area.jpg', thumb: '/images/clinic/360/waiting-area-thumb.jpg', yaw: -40 },
+  { id: 'treatment', label: 'Treatment room', src: '/images/clinic/360/treatment-room.jpg', thumb: '/images/clinic/360/treatment-room-thumb.jpg', yaw: 60 },
+  { id: 'private', label: 'Private treatment room', src: '/images/clinic/360/private-room.jpg', thumb: '/images/clinic/360/private-room-thumb.jpg', yaw: -20 },
+];
+---
+
+<div class="reveal mt-14 sm:mt-20" id="tour">
+  <div class="flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <p class="kicker">360° virtual tour</p>
+      <h3 class="text-[1.5rem] font-bold leading-tight sm:text-[1.9rem]">Look around the clinic before you visit.</h3>
+    </div>
+    <p class="flex items-center gap-2 text-[14px] text-slate-soft">
+      <svg viewBox="0 0 24 24" class="h-5 w-5 text-clinic" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M8 12h8m0 0-3-3m3 3-3 3M8 12l3-3m-3 3 3 3" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      Drag to look around · use full screen for the best view
+    </p>
+  </div>
+
+  <div class="relative mt-6 h-[360px] overflow-hidden rounded-md bg-ink-deep shadow-[0_0_0_1px_#DCE5EE] sm:h-[440px] lg:h-[520px]">
+    <div
+      id="tour-viewer"
+      class="absolute inset-0"
+      role="application"
+      aria-label="360 degree view of the clinic. Drag or use arrow keys to look around."
+      data-rooms={JSON.stringify(rooms)}
+    >
+    </div>
+
+    <div class="tour-badge pointer-events-none absolute left-3 top-3 z-[2] flex items-center gap-2 rounded-full bg-white/90 px-3 py-1.5 text-[12.5px] font-bold text-ink shadow-sm backdrop-blur sm:left-4 sm:top-4">
+      <span class="tour-spin grid h-5 w-5 place-items-center rounded-full bg-clinic text-[9px] font-extrabold text-white">360</span>
+      <span data-tour-current>{rooms[0].label}</span>
+    </div>
+  </div>
+
+  <div class="mt-3 grid grid-cols-3 gap-2 sm:mt-4 sm:gap-3" role="tablist" aria-label="Choose a room">
+    {
+      rooms.map((r, i) => (
+        <button
+          type="button"
+          role="tab"
+          aria-selected={i === 0 ? 'true' : 'false'}
+          data-tour-room={r.id}
+          class="tour-tab group relative overflow-hidden rounded-md text-left ring-2 ring-transparent transition"
+        >
+          <img src={r.thumb} alt="" class="aspect-[2/1] w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+          <span class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink-deep/85 to-transparent px-2 pb-1.5 pt-6 text-[12px] font-semibold leading-tight text-white sm:px-3 sm:pb-2 sm:text-[14px]">
+            {r.label}
+          </span>
+        </button>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .tour-tab[aria-selected='true'] { --tw-ring-color: #1a9bd7; }
+  .tour-tab[aria-selected='false'] img { filter: saturate(0.7) brightness(0.85); }
+  .tour-spin { animation: tour-spin 6s linear infinite; }
+  @keyframes tour-spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .tour-spin { animation: none; } }
+
+  /* Pannellum tweaks: its CSS sets position:relative + height:100%, keep it filling the box */
+  #tour-viewer { position: absolute !important; inset: 0; width: 100% !important; height: 100% !important; }
+  #tour-viewer :global(.pnlm-load-box) { background: rgba(13, 30, 56, 0.85); border-radius: 6px; }
+  #tour-viewer :global(.pnlm-about-msg) { display: none !important; }
+  #tour-viewer :global(.pnlm-controls-container) { top: auto; bottom: 12px; left: auto; right: 12px; }
+</style>
+
+<script>
+  import 'pannellum/build/pannellum.css';
+  // Loaded as a classic <script> (not bundled): Pannellum is an old-style
+  // global script and isn't written for strict-mode modules.
+  import pannellumUrl from 'pannellum/build/pannellum.js?url';
+
+  const loadPannellum = () =>
+    new Promise<void>((resolve, reject) => {
+      if ((window as any).pannellum) return resolve();
+      const s = document.createElement('script');
+      s.src = pannellumUrl;
+      s.onload = () => resolve();
+      s.onerror = reject;
+      document.head.appendChild(s);
+    });
+
+  type Room = { id: string; label: string; src: string; yaw: number };
+  const el = document.getElementById('tour-viewer');
+
+  if (el) {
+    const rooms: Room[] = JSON.parse(el.dataset.rooms || '[]');
+    const label = document.querySelector('[data-tour-current]');
+    const tabs = document.querySelectorAll<HTMLButtonElement>('[data-tour-room]');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let viewer: any = null;
+
+    const select = (id: string) => {
+      tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.tourRoom === id)));
+      const room = rooms.find((r) => r.id === id);
+      if (label && room) label.textContent = room.label;
+    };
+
+    const start = async () => {
+      await loadPannellum();
+      const scenes: Record<string, object> = {};
+      rooms.forEach((r) => {
+        scenes[r.id] = { type: 'equirectangular', panorama: r.src, yaw: r.yaw, pitch: -4, hfov: 105 };
+      });
+      viewer = (window as any).pannellum.viewer(el, {
+        default: { firstScene: rooms[0].id, sceneFadeDuration: 700, autoLoad: true },
+        scenes,
+        autoRotate: reduceMotion ? 0 : -3,
+        autoRotateInactivityDelay: 2500,
+        showZoomCtrl: true,
+        showFullscreenCtrl: true,
+        mouseZoom: false, // don't hijack page scrolling
+        compass: false,
+        minHfov: 60,
+        maxHfov: 120,
+      });
+      viewer.on('scenechange', (id: string) => select(id));
+    };
+
+    tabs.forEach((t) =>
+      t.addEventListener('click', () => {
+        const id = t.dataset.tourRoom || '';
+        select(id);
+        if (viewer && viewer.getScene() !== id) viewer.loadScene(id);
+      })
+    );
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          io.disconnect();
+          start();
+        }
+      },
+      { rootMargin: '300px 0px' }
+    );
+    io.observe(el);
+  }
+</script>

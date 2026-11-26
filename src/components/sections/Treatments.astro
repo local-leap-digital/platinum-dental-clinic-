@@ -1,7 +1,23 @@
 ---
-import { Plus } from '@lucide/astro';
+import { Plus, Check } from '@lucide/astro';
 import { treatments, treatmentGroups } from '../../data/treatments';
 import TreatmentDrawer from '../ui/TreatmentDrawer.astro';
+
+const featured = [
+  {
+    title: 'Advanced Dental Implantology',
+    points: [
+      'Specialised solutions for single-tooth replacement, multiple missing teeth and full-mouth rehabilitation.',
+      'Fellowship in Implantology from Saveetha Dental College & Hospital, Chennai.',
+    ],
+    body: 'Our implantology services are backed by specialised fellowship training from Saveetha Dental College & Hospital, Chennai, a reputed institution known for advanced dental education and clinical training. This specialised training strengthens our approach to implant planning, surgical procedures, prosthetic rehabilitation and the management of complex implant cases.',
+  },
+  {
+    title: 'Painless Root Canal Treatment',
+    points: ['5000+ root canals successfully completed in 2½ years.'],
+    body: 'Experience comfortable and stress-free root canal treatment with a focus on pain management, precision and patient comfort. Our aim is to make every root canal experience as smooth and comfortable as possible, while preserving your natural tooth.',
+  },
+];
 
 ---
 
@@ -16,6 +32,25 @@ import TreatmentDrawer from '../ui/TreatmentDrawer.astro';
         Every treatment starts with a check-up and a plan explained in plain words. Tap any treatment for details,
         or <a href="/book" class="font-semibold text-action hover:underline">book online</a>.
       </p>
+    </div>
+
+    <div class="reveal mt-10 grid gap-5 sm:mt-14 md:grid-cols-2 md:gap-6">
+      {
+        featured.map((f) => (
+          <article class="rounded-md border border-line bg-white p-6 sm:p-8">
+            <h3 class="text-[1.35rem] font-bold sm:text-[1.5rem]">{f.title}</h3>
+            <ul class="mt-4 space-y-3">
+              {f.points.map((p) => (
+                <li class="flex gap-3 text-[15.5px] leading-snug">
+                  <Check class="mt-0.5 h-5 w-5 shrink-0 text-clinic" stroke-width={2.2} />
+                  {p}
+                </li>
+              ))}
+            </ul>
+            <p class="mt-4 text-[15px] leading-relaxed text-slate">{f.body}</p>
+          </article>
+        ))
+      }
     </div>
 
     <div class="mt-10 sm:mt-14 space-y-10 sm:space-y-14">

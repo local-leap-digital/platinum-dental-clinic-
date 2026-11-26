@@ -1,10 +1,15 @@
-// Clinic tour photos. Replace with the clinic's own photos when personalising
-// (shoot landscape, daylight, chair + window in frame). Credits in CREDITS.md.
+// Clinic tour photos (the clinic's own photos, in /public/images/clinic).
+// Items with span: 'wide' take two columns. Keep each row adding up to 4
+// columns on desktop: wide = 2, normal = 1.
 export const gallery = [
-  { src: '/images/clinic-chair-art.jpg', alt: 'Treatment room with dental chair and framed artwork', caption: 'Treatment room 1', span: 'wide' },
-  { src: '/images/clinic-window-chair.jpg', alt: 'Dental chair beside a large window', caption: 'Treatment room 2 — window side' },
-  { src: '/images/clinic-xray-monitor.jpg', alt: 'Digital dental X-ray on a monitor beside the chair', caption: 'Digital X-ray, shown on screen' },
-  { src: '/images/clinic-instruments.jpg', alt: 'Dental handpieces hanging in a row', caption: 'Instruments, autoclaved after every patient' },
-  { src: '/images/clinic-consult-desk.jpg', alt: 'Second dental chair with wooden flooring', caption: 'Room 2 — after the evening clean' },
-  { src: '/images/clinic-blue-chair.jpg', alt: 'Blue dental chair with equipment', caption: 'Second treatment room', span: 'wide' },
+  { src: '/images/clinic/clinic-8.jpg', alt: 'Dental chair beside a large window, with wooden wall panels', caption: 'Treatment room with a view', span: 'wide' },
+  { src: '/images/clinic/clinic-9.jpg', alt: 'White handheld dental device on its stand, next to its carry case', caption: 'Modern dental equipment' },
+  { src: '/images/clinic/clinic-10.jpg', alt: 'Consultation desk with a leather chair and cabinets', caption: 'Consultation desk' },
+  { src: '/images/clinic/clinic-11.jpg', alt: 'Doctor’s cabin with a desk, chairs and large windows', caption: 'Doctor’s consultation cabin', span: 'wide' },
+  { src: '/images/clinic/clinic-12.jpg', alt: 'Treatment chair in a room with pale green walls', caption: 'Calm, green-toned treatment room' },
+  { src: '/images/clinic/clinic-13.jpg', alt: 'Dental chair by floor-to-ceiling windows overlooking the city', caption: 'Treatment chair overlooking the city' },
+  { src: '/images/clinic/clinic-14.jpg', alt: 'Dental chair and instrument tray beside the windows', caption: 'Spacious treatment area' },
+  { src: '/images/clinic/clinic-15.jpg', alt: 'Treatment room with dental chair, stool and UV unit on the wall', caption: 'Bright, airy treatment room' },
+  { src: '/images/clinic/clinic-16.jpg', alt: 'Reception counter with a green plant wall at the clinic entrance', caption: 'Reception' },
+  { src: '/images/clinic/clinic-17.jpg', alt: 'Private treatment room with wooden panelling and warm lighting', caption: 'Private treatment room' },
 ];
