@@ -34,10 +34,10 @@ const featured = [
       </p>
     </div>
 
-    <div class="reveal mt-8 grid gap-5 sm:mt-10 md:grid-cols-2 md:gap-6">
+    <div class="reveal stagger mt-8 grid gap-5 sm:mt-10 md:grid-cols-2 md:gap-6">
       {
         featured.map((f) => (
-          <article class="rounded-md border border-line bg-white p-6 sm:p-8">
+          <article class="lift rounded-md border border-line bg-white p-6 sm:p-8">
             <h3 class="text-[1.35rem] font-bold sm:text-[1.5rem]">{f.title}</h3>
             <ul class="mt-4 space-y-3">
               {f.points.map((p) => (

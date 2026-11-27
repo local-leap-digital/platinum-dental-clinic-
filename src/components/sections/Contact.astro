@@ -47,13 +47,56 @@ const row = 'flex gap-3.5 border-b border-line py-4';
         <Navigation class="h-4 w-4" /> Get directions
       </a>
     </div>
-    <div class="h-[300px] sm:h-[380px] lg:h-auto lg:min-h-full">
-      <iframe
-        title="Map showing the clinic location in Nagala Park, Kolhapur"
-        src={site.mapEmbed}
-        class="h-full w-full border-0 lg:min-h-[360px]"
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <div class="flex flex-col">
+      {/* Street view of the building, so visitors recognise it on arrival */}
+      <figure class="reveal reveal-img relative overflow-hidden">
+        <img
+          src="/images/clinic-building.jpg"
+          alt="Krystal Square building in Nagala Park with the blue Platinum Dental Care sign on the third floor"
+          class="aspect-[1060/596] w-full object-cover"
+          loading="lazy"
+          decoding="async"
+          width="1060"
+          height="596"
+        />
+        {/* Pulsing outline around the clinic sign in the photo */}
+        <span class="sign-ring" aria-hidden="true"></span>
+        <figcaption class="absolute bottom-3 left-3 right-3 flex items-center gap-2 rounded-sm bg-white/95 px-3 py-1.5 text-[12.5px] font-semibold leading-snug text-ink sm:right-auto">
+          <MapPin class="h-4 w-4 shrink-0 text-clinic" aria-hidden="true" />
+          Look for the blue Platinum Dental Care sign on the 3rd floor.
+        </figcaption>
+      </figure>
+      <div class="h-[300px] sm:h-[380px] lg:h-auto lg:min-h-[320px] lg:flex-1">
+        <iframe
+          title="Map showing the clinic location in Nagala Park, Kolhapur"
+          src={site.mapEmbed}
+          class="h-full w-full border-0"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
     </div>
   </div>
 </section>
+
+<style>
+  /* Box drawn over the "Platinum Dental Care" sign (positions are % of the photo) */
+  .sign-ring {
+    position: absolute;
+    left: 56.8%;
+    top: 32%;
+    width: 31.6%;
+    height: 11%;
+    border: 2px solid #fff;
+    border-radius: 4px;
+    box-shadow: 0 0 0 1px rgba(26, 155, 215, 0.6);
+    pointer-events: none;
+    animation: sign-pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes sign-pulse {
+    0%, 100% { opacity: 0.35; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.04); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sign-ring { animation: none; opacity: 0.8; }
+  }
+</style>

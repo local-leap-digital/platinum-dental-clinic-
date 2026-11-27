@@ -12,7 +12,7 @@ export const reasons = [
   {
     icon: 'ShieldCheck',
     title: 'Spotless hygiene',
-    text: 'A clean, well-kept clinic. Every patient gets a newly sterilised kit, opened in front of them.',
+    text: 'A clean, well-kept clinic, with chairs and surfaces disinfected between every patient.',
   },
   {
     icon: 'Monitor',
@@ -20,9 +20,9 @@ export const reasons = [
     text: 'A newly fitted clinic with modern equipment and low-dose digital X-rays that you can see on screen.',
   },
   {
-    icon: 'Sparkles',
-    title: 'Implants & smile restoration',
-    text: 'Missing or broken teeth replaced with implants, crowns and bridges, all planned here at the clinic.',
+    icon: 'PackageCheck',
+    title: 'A fresh kit for every patient',
+    text: 'A new sterilised instrument kit for every patient, opened in front of you.',
   },
   {
     icon: 'MessageCircle',

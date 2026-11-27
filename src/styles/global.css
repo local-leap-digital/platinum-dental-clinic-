@@ -70,10 +70,57 @@
 .no-scrollbar { scrollbar-width: none; -webkit-overflow-scrolling: touch; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
 
-/* Scroll reveal */
-.reveal { opacity: 0; transform: translateY(14px); transition: opacity 600ms ease, transform 600ms ease; }
+/* ---------- Motion ----------
+   Everything below animates only opacity and transform, which the browser
+   hands to the GPU, so it stays smooth on older phones. No animation library,
+   and all of it switches off for visitors who ask for reduced motion. */
+:root { --ease-out: cubic-bezier(0.22, 1, 0.36, 1); }
+
+/* Scroll reveal: block fades and rises into place */
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity 700ms var(--ease-out), transform 700ms var(--ease-out); }
 .reveal.is-in { opacity: 1; transform: none; }
+
+/* Stagger: children of a revealed block arrive one after another */
+.stagger > * { opacity: 0; transform: translateY(14px); transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out); }
+.stagger.is-in > * { opacity: 1; transform: none; }
+.stagger.is-in > :nth-child(2) { transition-delay: 90ms; }
+.stagger.is-in > :nth-child(3) { transition-delay: 180ms; }
+.stagger.is-in > :nth-child(4) { transition-delay: 270ms; }
+.stagger.is-in > :nth-child(5) { transition-delay: 360ms; }
+.stagger.is-in > :nth-child(n+6) { transition-delay: 420ms; }
+
+/* Image reveal: photo settles from a slight zoom */
+.reveal-img img { transform: scale(1.06); transition: transform 1200ms var(--ease-out); }
+.reveal-img.is-in img { transform: none; }
+.reveal-img { overflow: hidden; }
+
+/* Section label: the short rule draws in when its block appears */
+.reveal .kicker::before { transform: scaleX(0); transform-origin: left; transition: transform 700ms var(--ease-out) 200ms; }
+.reveal.is-in .kicker::before { transform: none; }
+.text-center .kicker::before, .kicker.justify-center::before { transform-origin: center; }
+
+/* Hero: plays once on page load (CSS only, no JavaScript needed) */
+@keyframes rise-in { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+.hero-in > * { animation: rise-in 800ms var(--ease-out) both; }
+.hero-in > :nth-child(2) { animation-delay: 100ms; }
+.hero-in > :nth-child(3) { animation-delay: 200ms; }
+.hero-in > :nth-child(4) { animation-delay: 300ms; }
+.hero-media { animation: fade-in 900ms ease 150ms both; }
+
+/* Hover: cards lift slightly (only on devices with a real pointer) */
+@media (hover: hover) {
+  .lift { transition: transform 250ms var(--ease-out), box-shadow 250ms var(--ease-out); }
+  .lift:hover { transform: translateY(-4px); box-shadow: 0 14px 30px -14px rgba(19, 41, 75, 0.25); }
+  :is(.btn, .btn-primary, .btn-outline, .btn-light):hover { transform: translateY(-1px); }
+}
+:is(.btn, .btn-primary, .btn-outline, .btn-light) { transition-property: color, background-color, border-color, transform; }
+:is(.btn, .btn-primary, .btn-outline, .btn-light):active { transform: scale(0.98); }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .reveal { opacity: 1; transform: none; transition: none; }
+  .reveal, .stagger > *, .reveal-img img, .reveal .kicker::before { opacity: 1; transform: none; transition: none; }
+  .hero-in > *, .hero-media { animation: none; }
+  .lift, .lift:hover, :is(.btn, .btn-primary, .btn-outline, .btn-light),
+  :is(.btn, .btn-primary, .btn-outline, .btn-light):is(:hover, :active) { transition: none; transform: none; }
 }

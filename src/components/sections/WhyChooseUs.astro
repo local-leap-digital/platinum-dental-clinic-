@@ -1,10 +1,10 @@
 ---
 // "Why choose us": three reasons | simple 3D tooth (three.js, lazy-loaded) | three reasons.
 // Content lives in src/data/whyChooseUs.js.
-import { Feather, ShieldCheck, Monitor, Sparkles, MessageCircle, HeartHandshake } from '@lucide/astro';
+import { Feather, ShieldCheck, Monitor, PackageCheck, MessageCircle, HeartHandshake } from '@lucide/astro';
 import { reasons } from '../../data/whyChooseUs';
 
-const icons = { Feather, ShieldCheck, Monitor, Sparkles, MessageCircle, HeartHandshake };
+const icons = { Feather, ShieldCheck, Monitor, PackageCheck, MessageCircle, HeartHandshake };
 const left = reasons.slice(0, 3);
 const right = reasons.slice(3);
 ---
@@ -37,7 +37,7 @@ const right = reasons.slice(3);
 
       {
         [left, right].map((col, c) => (
-          <ul class:list={['reveal grid gap-7 sm:grid-cols-2 sm:gap-8 lg:grid-cols-1 lg:gap-12', c === 0 ? 'lg:order-1' : 'lg:order-3']}>
+          <ul class:list={['reveal stagger grid gap-7 sm:grid-cols-2 sm:gap-8 lg:grid-cols-1 lg:gap-12', c === 0 ? 'lg:order-1' : 'lg:order-3']}>
             {col.map((r) => {
               const Icon = icons[r.icon];
               return (
