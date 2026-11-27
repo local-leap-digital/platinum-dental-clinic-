@@ -47,30 +47,32 @@ const row = 'flex gap-3.5 border-b border-line py-4';
         <Navigation class="h-4 w-4" /> Get directions
       </a>
     </div>
-    <div class="flex flex-col">
+    <div class="wrap flex flex-col gap-5 pb-12 sm:pb-16 md:pb-20 lg:ml-0 lg:mr-auto lg:max-w-[600px] lg:py-20 lg:pl-0">
       {/* Street view of the building, so visitors recognise it on arrival */}
-      <figure class="reveal reveal-img relative overflow-hidden">
-        <img
-          src="/images/clinic-building.jpg"
-          alt="Krystal Square building in Nagala Park with the blue Platinum Dental Care sign on the third floor"
-          class="aspect-[1060/596] w-full object-cover"
-          loading="lazy"
-          decoding="async"
-          width="1060"
-          height="596"
-        />
-        {/* Pulsing outline around the clinic sign in the photo */}
-        <span class="sign-ring" aria-hidden="true"></span>
-        <figcaption class="absolute bottom-3 left-3 right-3 flex items-center gap-2 rounded-sm bg-white/95 px-3 py-1.5 text-[12.5px] font-semibold leading-snug text-ink sm:right-auto">
-          <MapPin class="h-4 w-4 shrink-0 text-clinic" aria-hidden="true" />
-          Look for the blue Platinum Dental Care sign on the 3rd floor.
+      <figure class="reveal overflow-hidden rounded-md border border-line bg-white shadow-[0_1px_2px_rgba(19,41,75,0.06),0_8px_24px_-12px_rgba(19,41,75,0.18)]">
+        <div class="reveal-img relative">
+          <img
+            src="/images/clinic-building.jpg"
+            alt="Krystal Square building in Nagala Park with the blue Platinum Dental Care sign on the third floor"
+            class="block aspect-[1060/596] w-full object-cover"
+            loading="lazy"
+            decoding="async"
+            width="1060"
+            height="596"
+          />
+          {/* Pulsing outline around the clinic sign in the photo */}
+          <span class="sign-ring" aria-hidden="true"></span>
+        </div>
+        <figcaption class="flex items-center gap-2.5 border-t border-line px-4 py-3 text-[13.5px] leading-snug text-slate">
+          <MapPin class="h-4 w-4 shrink-0 text-clinic-dark" aria-hidden="true" />
+          <span><span class="font-semibold text-ink">Krystal Square.</span> Look for the blue Platinum Dental Care sign on the 3rd floor.</span>
         </figcaption>
       </figure>
-      <div class="h-[300px] sm:h-[380px] lg:h-auto lg:min-h-[320px] lg:flex-1">
+      <div class="h-[300px] overflow-hidden rounded-md border border-line bg-white shadow-[0_1px_2px_rgba(19,41,75,0.06),0_8px_24px_-12px_rgba(19,41,75,0.18)] sm:h-[340px] lg:h-auto lg:min-h-[280px] lg:flex-1">
         <iframe
           title="Map showing the clinic location in Nagala Park, Kolhapur"
           src={site.mapEmbed}
-          class="h-full w-full border-0"
+          class="block h-full w-full border-0"
           loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
