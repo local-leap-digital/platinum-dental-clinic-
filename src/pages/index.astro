@@ -1,7 +1,7 @@
 ---
 // Single-page site. Section order:
-// Intro → About the clinic → Doctors → Treatments → Why choose us →
-// Before & after → Patient video reviews → Google reviews → Contact → FAQs
+// Intro → About the clinic → Doctors → Treatments (incl. Before & after) →
+// Why choose us → Patient video reviews → Google reviews → Contact → FAQs
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/sections/Hero.astro';
 import About from '../components/sections/About.astro';
@@ -23,8 +23,8 @@ import FAQ from '../components/sections/FAQ.astro';
   <Gallery />
   <Doctors />
   <Treatments />
-  <WhyChooseUs />
   <BeforeAfter />
+  <WhyChooseUs />
   <VideoTestimonials />
   <GoogleReviews />
   <Contact />

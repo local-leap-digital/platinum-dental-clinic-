@@ -11,7 +11,7 @@ const isActive = (href) => path === href;
   <div class="wrap flex h-16 items-center justify-between md:h-[72px]">
     <Logo />
     <nav aria-label="Main" class="hidden lg:block">
-      <ul class="flex items-center gap-7 font-display text-[15px] font-semibold text-ink">
+      <ul class="flex items-center gap-5 xl:gap-7 font-display text-[15px] font-semibold text-ink">
         {
           nav.map((n) => (
             <li>
@@ -89,6 +89,7 @@ const isActive = (href) => path === href;
   // Sections without their own menu item count towards a related one.
   const alias: Record<string, string> = {
     clinic: 'about',
+    results: 'treatments',
     'patient-reviews': 'google-reviews',
     'contact-form': 'contact',
   };

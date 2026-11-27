@@ -36,6 +36,7 @@ export const nav = [
   { label: 'About', href: '/#about' },
   { label: 'Doctors', href: '/#doctors' },
   { label: 'Treatments', href: '/#treatments' },
+  { label: 'Why Us', href: '/#why-us' },
   { label: 'Reviews', href: '/#google-reviews' },
   { label: 'Contact', href: '/#contact' },
   { label: 'FAQs', href: '/#faq' },
