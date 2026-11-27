@@ -15,7 +15,7 @@ const isActive = (href) => path === href;
         {
           nav.map((n) => (
             <li>
-              <a href={n.href} aria-current={isActive(n.href) ? 'page' : undefined} class:list={['link-underline py-1 hover:text-action', isActive(n.href) && 'text-action']}>{n.label}</a>
+              <a href={n.href} data-nav-link aria-current={isActive(n.href) ? 'page' : undefined} class:list={['link-underline py-1 hover:text-action aria-[current]:text-action', isActive(n.href) && 'text-action']}>{n.label}</a>
             </li>
           ))
         }
@@ -43,7 +43,7 @@ const isActive = (href) => path === href;
       {
         nav.map((n) => (
           <li>
-            <a href={n.href} data-menu-link aria-current={isActive(n.href) ? 'page' : undefined} class:list={['block border-b border-line py-3.5 font-display text-[17px] font-semibold', isActive(n.href) ? 'text-action' : 'text-ink']}>
+            <a href={n.href} data-menu-link data-nav-link aria-current={isActive(n.href) ? 'page' : undefined} class:list={['block border-b border-line py-3.5 font-display text-[17px] font-semibold aria-[current]:text-action', isActive(n.href) ? 'text-action' : 'text-ink']}>
               {n.label}
             </a>
           </li>
@@ -84,4 +84,50 @@ const isActive = (href) => path === href;
   // Close the menu if the screen grows to desktop width (e.g. phone rotated / tablet)
   window.matchMedia('(min-width: 1024px)').addEventListener('change', (m) => m.matches && setOpen(false));
   document.querySelectorAll('[data-menu-link]').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+
+  // Scroll spy: highlight the menu item for the section in view.
+  // Sections without their own menu item count towards a related one.
+  const alias: Record<string, string> = {
+    clinic: 'about',
+    'patient-reviews': 'google-reviews',
+    'contact-form': 'contact',
+  };
+  const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-nav-link]'));
+  const navIds = new Set(navLinks.map((a) => a.hash.slice(1)).filter(Boolean));
+  const spySections = Array.from(document.querySelectorAll<HTMLElement>('main section[id]'));
+  let currentSpy: string | null = null;
+  const setActive = (id: string | null) => {
+    if (id === currentSpy) return;
+    currentSpy = id;
+    navLinks.forEach((a) => {
+      const on = !!id && a.hash === `#${id}`;
+      if (on) a.setAttribute('aria-current', 'location');
+      else a.removeAttribute('aria-current');
+    });
+  };
+  const spy = () => {
+    // A line a third of the way down the screen; the last section starting above it is "current".
+    const line = (header?.offsetHeight ?? 72) + window.innerHeight * 0.3;
+    let active: string | null = null;
+    for (const s of spySections) {
+      if (s.getBoundingClientRect().top <= line) active = s.id;
+      else break;
+    }
+    // At the very bottom of the page, the last section wins.
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2 && spySections.length) {
+      active = spySections[spySections.length - 1].id;
+    }
+    const mapped = active ? alias[active] ?? active : null;
+    setActive(mapped && navIds.has(mapped) ? mapped : null);
+  };
+  if (navLinks.length && spySections.length) {
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => { spy(); ticking = false; });
+    }, { passive: true });
+    window.addEventListener('resize', spy);
+    spy();
+  }
 </script>

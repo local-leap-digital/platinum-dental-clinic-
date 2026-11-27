@@ -52,7 +52,8 @@
     background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
     transition: background-size 150ms ease;
   }
-  .link-underline:hover { background-size: 100% 1px; }
+  .link-underline:hover,
+  .link-underline[aria-current] { background-size: 100% 1px; }
 
   .outline-numeral {
     @apply font-display font-extrabold leading-none;
