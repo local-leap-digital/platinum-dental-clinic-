@@ -17,7 +17,7 @@ import {
 
 const SKY = 0x1a9bd7;
 
-// Same outline as public/favicon.svg (64-unit grid), flipped so y points up.
+// Tooth outline on a 64-unit grid, flipped so y points up.
 function toothShape() {
   const p = (x, y) => [(x - 32) / 10, (36 - y) / 10];
   const s = new Shape();
